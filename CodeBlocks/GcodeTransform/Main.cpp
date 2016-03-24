@@ -33,45 +33,44 @@ struct Vector3 {
 
 
 const char* filename = "test.gcode";
+
 // === VARIABLE DECLARATIONS
 
-	//Vector3 offset(36, 35, 50);
+//Vector3 offset(36, 35, 50);
 
-	Vector3 nozzleCompensation(0, 0, 0);
-	Vector3 currentPosition(0, 0, 0);
+Vector3 nozzleCompensation(0, 0, 0);
+Vector3 currentPosition(0, 0, 0);
 
-	// change these
-	double S0 = -90;
-	double S1 = 0;
-	Vector2 nozzleOffset00(47, 26); // nozzle coordinates when S0 = 0 and S1 = 0
-	Vector3 nozzleOffset(72, -16, 85); // extents of the nozzle when swinging, XY coordinates when S0 = 90 and S1 = 0, and Z height when S1 = 90
-	double dist = 67; // distance of X from when S0 = 0 and S1 = 0 to when S0 = 0 and S1 = 90
-	Vector2 bedOffset(100, 100); // your origin is (0,0), the center of the bed is?
-	Vector3 partOffset(0, 0, 0); // where you want the center point of the base of the the part to be relative to the bed offset
+// change these
+double S0 = -90;
+double S1 = 0;
+Vector2 nozzleOffset00(47, 26); // nozzle coordinates when S0 = 0 and S1 = 0
+Vector3 nozzleOffset(72, -16, 85); // extents of the nozzle when swinging, XY coordinates when S0 = 90 and S1 = 0, and Z height when S1 = 90
+double dist = 67; // distance of X from when S0 = 0 and S1 = 0 to when S0 = 0 and S1 = 90
+Vector2 bedOffset(100, 100); // your origin is (0,0), the center of the bed is?
+Vector3 partOffset(0, 0, 0); // where you want the center point of the base of the the part to be relative to the bed offset
 
-	// lists
-	vector<string> fileLinesArray;
-	vector<string> commandsArray;
-	vector<vector<double> > xyzArray;
-	vector<vector<string> > parametersArray;
-	vector<int> lineNumbersArray;
+// lists
+vector<string> fileLinesArray;
+vector<string> commandsArray;
+vector<vector<double> > xyzArray;
+vector<vector<string> > parametersArray;
+vector<int> lineNumbersArray;
 
-	// matrix
-	mat xyzMatrix;
-	mat rotationXMatrix;
-	mat rotationYMatrix;
+// matrix
+mat xyzMatrix;
+mat rotationXMatrix;
+mat rotationYMatrix;
 
-	// for settings
-	int choice;
-    int choice1;
-    void settings();
-    void mainSettings();
-    void otherSettings();
-    void menuOtherSettings();
+// for settings
+int choice;
+int choice1;
+void settings();
+void mainSettings();
+void otherSettings();
+void menuOtherSettings();
 
 int main() {
-
-
 	// settings
     settings();
 
@@ -188,42 +187,40 @@ int main() {
 
 void settings(){
     do{
-        cout << "========================================" << endl;
         mainSettings();
         switch(choice){
-        case 1:
-            cout << "CHANGE SERVO ROTATIONS AND PART OFFSET:" << endl;
-            cout << "Change Servo Rotation:" << endl;
-            cout << "S0 = ";
-            cin >> S0;
-            cout << "S1 = ";
-            cin >> S1;
-            cout << endl;
-            cout << "Change Part Offset:" << endl;
-            cout << "x = ";
-            cin >> partOffset.x;
-            cout << "y = ";
-            cin >> partOffset.y;
-            cout << "z = ";
-            cin >> partOffset.z;
-            cout << endl;
-            break;
-        case 2:
-            otherSettings();
-            break;
-        case 3:
-            cout << endl;
-            break;
-        default:
-            cout << "ERROR. Not an option." << endl;
-            break;
+            case 1:
+                cout << "CHANGE SERVO ROTATIONS AND PART OFFSET:" << endl;
+                cout << "Change Servo Rotation:" << endl;
+                cout << "S0 = ";
+                cin >> S0;
+                cout << "S1 = ";
+                cin >> S1;
+                cout << endl;
+                cout << "Change Part Offset:" << endl;
+                cout << "x = ";
+                cin >> partOffset.x;
+                cout << "y = ";
+                cin >> partOffset.y;
+                cout << "z = ";
+                cin >> partOffset.z;
+                cout << endl;
+                break;
+            case 2:
+                otherSettings();
+                break;
+            case 3:
+                cout << endl;
+                break;
+            default:
+                cout << "ERROR. Not an option." << endl;
+                break;
         }
     }while (choice !=3);
 }
 
 void otherSettings(void){
     do{
-        cout << "========================================" << endl;
         menuOtherSettings();
         switch(choice1){
             case 1:
@@ -270,6 +267,7 @@ void otherSettings(void){
 }
 
 void mainSettings(void){
+    cout << "==================================================" << endl;
     cout << "CURRENT SETTINGS:" << endl;
     cout << "S0 = " << S0 << endl;
     cout << "S1 = " << S1 << endl;
@@ -287,6 +285,7 @@ void mainSettings(void){
 }
 
 void menuOtherSettings(void){
+    cout << "==================================================" << endl;
     cout << "OTHER SETTINGS:" << endl;
     cout << "Nozzle Offset when S0 =0 and S1 = 0: (" << nozzleOffset00.x << "," << nozzleOffset00.y << ")" << endl;
     cout << "Nozzle Offset: (" << nozzleOffset.x << "," << nozzleOffset.y << "," << nozzleOffset.z << ")" << endl;
