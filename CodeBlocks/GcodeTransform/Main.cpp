@@ -61,6 +61,111 @@ int main() {
 	mat rotationXMatrix;
 	mat rotationYMatrix;
 
+	// settings
+    int choice;
+    int choice1;
+    cout << "CURRENT SETTINGS:" << endl;
+    cout << "S0 = " << S0 << endl;
+    cout << "S1 = " << S1 << endl;
+    cout << "Part Offset (" << partOffset.x << "," << partOffset.y << "," << partOffset.z << ")" << endl;
+    cout << endl << endl;
+
+    cout << "CHANGE SETTINGS:" << endl;
+    cout << "[1] Change Servo Rotations and Part Offset" << endl;
+    cout << "[2] Other Settings" << endl;
+    cout << "[3] No Changes" << endl;
+    cin >> choice;
+
+    switch(choice){
+        case 1:
+            cout << endl;
+            cout << "CHANGE SERVO ROTATIONS AND PART OFFSET:" << endl;
+            cout << "Change Servo Rotation:" << endl;
+            cout << "S0 = ";
+            cin >> S0;
+            cout << "S1 = ";
+            cin >> S1;
+            cout << endl;
+            cout << "Change Part Offset:" << endl;
+            cout << "x = ";
+            cin >> partOffset.x;
+            cout << "y = ";
+            cin >> partOffset.y;
+            cout << "z = ";
+            cin >> partOffset.z;
+            cout << endl << endl;
+            break;
+        case 2:
+            cout << endl;
+            cout << "CURRENT SETTINGS:" << endl;
+            cout << "Nozzle Offset when S0 =0 and S1 = 0: (" << nozzleOffset00.x << "," << nozzleOffset00.y << ")" << endl;
+            cout << "Nozzle Offset: (" << nozzleOffset.x << "," << nozzleOffset.y << "," << nozzleOffset.z << ")" << endl;
+            cout << "Bed Offset: (" << bedOffset.x << "," << bedOffset.y <<  ")" << endl;
+            cout << "Distance =  " << dist << endl;
+            cout << endl;
+            cout << "CHANGE SETTINGS:"<< endl;
+            cout << "[1] Change Nozzle Offsets" << endl;
+            cout << "[2] Change Bed Offset" << endl;
+            cout << "[3] Change Distance" << endl;
+            cout << "[4] No Changes"<< endl;
+            cin >> choice1;
+                switch(choice1){
+                case 1:
+                    cout << endl;
+                    cout << "CHANGE NOZZLE OFFSETS:" << endl;
+                    cout << "Nozzle Offset when S0 =0 and S1 = 0:" << endl;
+                    cout << "x = ";
+                    cin >> nozzleOffset00.x;
+                    cout << "y = ";
+                    cin >> nozzleOffset00.y;
+                    cout << endl;
+
+                    cout << "Nozzle Offset:" << endl;
+                    cout << "x = ";
+                    cin >> nozzleOffset.x;
+                    cout << "y = ";
+                    cin >> nozzleOffset.y;
+                    cout << "z = ";
+                    cin >> nozzleOffset.z;
+                    cout << endl << endl;
+                    break;
+                case 2:
+                    cout << endl;
+                    cout << "CHANGE BED OFFSET:" << endl;
+                    cout << "Bed Offset:" << endl;
+                    cout << "x = ";
+                    cin >> bedOffset.x;
+                    cout << "y = ";
+                    cin >> bedOffset.y;
+                    cout << endl << endl;
+                    break;
+                case 3:
+                    cout << endl;
+                    cout << "CHANGE DISTANCE OF NOZZLES:" << endl;
+                    cout << "Distance = ";
+                    cin >> dist;
+                    cout << endl << endl;
+                break;
+                case 4:
+                    cout << endl << endl;
+                    break;
+                default:
+                    cout << "ERROR. Not an option." << endl << endl;
+                    break;
+
+                }
+
+            break;
+        case 3:
+            cout << endl << endl;
+            break;
+        default:
+            cout << "ERROR. Not an option." << endl << endl;
+            break;
+
+    }
+
+
 	// === MATH TIME
 	// the values below represent where the nozzle is versus where it should be. subtracting the values above to the current position should compensate for where the nozzle is when rotating
 	nozzleCompensation.x = nozzleOffset.x / 2 + cos((S0 - atan(nozzleOffset.x / nozzleOffset.y)*180.0f/M_PI)*M_PI/180.0f)*sqrt(pow(nozzleOffset.x / 2, 2) + pow(nozzleOffset.y / 2, 2)) + (sin((S0 + 90)*M_PI/180.0f)*dist*sin(S1*M_PI/180.0f));
