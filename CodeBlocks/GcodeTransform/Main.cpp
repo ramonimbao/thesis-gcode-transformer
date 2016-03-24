@@ -5,14 +5,13 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <fstream>
+#include <iomanip>
 
-#include "armadillo"
-
-//#define M_PI 3.14159265358979323846
-long double M_PI = atan(1.0f)*4;
+#include "Eigen/Dense"
 
 using namespace std;
-using namespace arma;
+using namespace Eigen;
 
 struct Vector2 {
 	double x, y;
@@ -32,7 +31,7 @@ struct Vector3 {
 };
 
 
-const char* filename = "test.gcode";
+string inputFilename, outputFilename;
 
 // === VARIABLE DECLARATIONS
 
@@ -42,7 +41,7 @@ Vector3 nozzleCompensation(0, 0, 0);
 Vector3 currentPosition(0, 0, 0);
 
 // change these
-double S0 = -90;
+double S0 = 90;
 double S1 = 0;
 Vector2 nozzleOffset00(47, 26); // nozzle coordinates when S0 = 0 and S1 = 0
 Vector3 nozzleOffset(72, -16, 85); // extents of the nozzle when swinging, XY coordinates when S0 = 90 and S1 = 0, and Z height when S1 = 90
@@ -58,9 +57,9 @@ vector<vector<string> > parametersArray;
 vector<int> lineNumbersArray;
 
 // matrix
-mat xyzMatrix;
-mat rotationXMatrix;
-mat rotationYMatrix;
+Matrix<double, Dynamic, Dynamic, RowMajor> xyzMatrix;
+MatrixXd rotationXMatrix(3,3);
+MatrixXd rotationYMatrix(3,3);
 
 // for settings
 int choice;
@@ -73,17 +72,21 @@ void menuOtherSettings();
 int main() {
 	// settings
     settings();
+    cout << "Enter input filename: ";
+    cin >> inputFilename;
+    cout << "Enter output filename: ";
+    cin >> outputFilename;
 
 	// === MATH TIME
 	// the values below represent where the nozzle is versus where it should be. subtracting the values above to the current position should compensate for where the nozzle is when rotating
 	nozzleCompensation.x = nozzleOffset.x / 2 + cos((S0 - atan(nozzleOffset.x / nozzleOffset.y)*180.0f/M_PI)*M_PI/180.0f)*sqrt(pow(nozzleOffset.x / 2, 2) + pow(nozzleOffset.y / 2, 2)) + (sin((S0 + 90)*M_PI/180.0f)*dist*sin(S1*M_PI/180.0f));
 	nozzleCompensation.y = nozzleOffset.y / 2 + sin((S0 - atan(nozzleOffset.x / nozzleOffset.y)*180.0f/M_PI)*M_PI/180.0f)*sqrt(pow(nozzleOffset00.x - nozzleOffset.x / 2.0f, 2) + pow(nozzleOffset00.y - nozzleOffset.y / 2.0f, 2)) + (sin((S0 + 90)*M_PI/180.0f)*dist*sin(S1*M_PI/180.0f));
 	nozzleCompensation.z = cos((90 - abs(S1))*M_PI/180.0f) * nozzleOffset.z;
-	cout << "; Nozzle Compensation: (" << nozzleCompensation.x << "," << nozzleCompensation.y << "," << nozzleCompensation.z << ")\n";
+	//cout << "; Nozzle Compensation: (" << nozzleCompensation.x << "," << nozzleCompensation.y << "," << nozzleCompensation.z << ")\n";
 
 	// === FILE READING
 	string line;
-	ifstream file(filename);
+	ifstream file(inputFilename);
 	int currentLineNumber = 0;
 	while (getline(file, line)) {
 		istringstream iss(line);
@@ -96,45 +99,45 @@ int main() {
 			vector<string> extraParams;
 			if (!p0.empty()) {
 				if (p0.at(0) == 'X') {
-					currentPosition.x = atof(p0.substr(1, string::npos).data()) - nozzleCompensation.x + bedOffset.x;
+					currentPosition.x = atof(p0.substr(1, string::npos).data());
 					//g01 << " " << p0;
 				}
 				if (p0.at(0) == 'Y') {
-					currentPosition.y = atof(p0.substr(1, string::npos).data()) - nozzleCompensation.y + bedOffset.y;
+					currentPosition.y = atof(p0.substr(1, string::npos).data());
 					//g01 << " " << p0;
 				}
 				if (p0.at(0) == 'Z') {
-					currentPosition.z = atof(p0.substr(1, string::npos).data()) - nozzleCompensation.z;
+					currentPosition.z = atof(p0.substr(1, string::npos).data());
 					//g01 << " " << p0;
 				}
 				if (p0.at(0) == 'E' || p0.at(0) == 'F') extraParams.push_back(p0);
 			}
 			if (!p1.empty()) {
 				if (p1.at(0) == 'X') {
-					currentPosition.x = atof(p1.substr(1, string::npos).data()) - nozzleCompensation.x + bedOffset.x;
+					currentPosition.x = atof(p1.substr(1, string::npos).data());
 					//g01 << " " << p1;
 				}
 				if (p1.at(0) == 'Y') {
-					currentPosition.y = atof(p1.substr(1, string::npos).data()) - nozzleCompensation.y + bedOffset.y;
+					currentPosition.y = atof(p1.substr(1, string::npos).data());
 					//g01 << " " << p1;
 				}
 				if (p1.at(0) == 'Z') {
-					currentPosition.z = atof(p1.substr(1, string::npos).data()) - nozzleCompensation.z;
+					currentPosition.z = atof(p1.substr(1, string::npos).data());
 					//g01 << " " << p1;
 				}
 				if (p1.at(0) == 'E' || p1.at(0) == 'F') extraParams.push_back(p1);//g01 << " " << p1;
 			}
 			if (!p2.empty()) {
 				if (p2.at(0) == 'X') {
-					currentPosition.x = atof(p2.substr(1, string::npos).data()) - nozzleCompensation.x + bedOffset.x;
+					currentPosition.x = atof(p2.substr(1, string::npos).data());
 					//g01 << " " << p2;
 				}
 				if (p2.at(0) == 'Y') {
-					currentPosition.y = atof(p2.substr(1, string::npos).data()) - nozzleCompensation.y + bedOffset.y;
+					currentPosition.y = atof(p2.substr(1, string::npos).data());
 					//g01 << " " << p2;
 				}
 				if (p2.at(0) == 'Z') {
-					currentPosition.z = atof(p2.substr(1, string::npos).data()) - nozzleCompensation.z;
+					currentPosition.z = atof(p2.substr(1, string::npos).data());
 					//g01 << " " << p2;
 				}
 				if (p2.at(0) == 'E' || p2.at(0) == 'F') extraParams.push_back(p2);//g01 << " " << p2;
@@ -147,8 +150,14 @@ int main() {
 				if (p4.at(0) == 'F') extraParams.push_back(p4); //g01 << " " << p4;
 			}
 			commandsArray.push_back(command);
-			xyzMatrix << currentPosition.x << currentPosition.y << currentPosition.z << endr;
-			xyzArray.push_back({ currentPosition.x, currentPosition.y, currentPosition.z });
+            xyzArray.push_back({currentPosition.x, currentPosition.y, currentPosition.z});
+			//xyzMatrix << currentPosition.x << currentPosition.y << currentPosition.z << endr;
+			/*
+			Row<double> newRow(3);
+			newRow[0] = currentPosition.x;
+			newRow[1] = currentPosition.y;
+			newRow[2] = currentPosition.z;
+			xyzMatrix.insert_rows(xyzMatrix.n_rows, newRow);*/
 			parametersArray.push_back(extraParams);
 			lineNumbersArray.push_back(currentLineNumber);
 			//cout << "Current position: (" << currentPosition.x << "," << currentPosition.y << "," << currentPosition.z << ")\n";
@@ -160,6 +169,42 @@ int main() {
 
 	// === MATRIX MATH TIME
 
+	double rotX = S1 * sin((S0 + 90)*M_PI/180);
+	double rotY = S1 * cos((S0 + 90)*M_PI/180);
+	cout << "Rot X, Y: " << rotX << "," << rotY << endl;
+
+	rotationXMatrix << 1, 0, 0,
+                       0, cos(rotX*M_PI/180), sin(rotX*M_PI/180),
+                       0, -sin(rotX*M_PI/180), cos(rotX*M_PI/180);
+
+    rotationYMatrix << cos(rotY*M_PI/180), 0, sin(rotY*M_PI/180),
+                        0, 1, 0,
+                        -sin(rotY*M_PI/180), 0, cos(rotY*M_PI/180);
+
+    cout << "Doing the matrix math.\n";
+    int xyzSize = xyzArray.size();
+    xyzMatrix.resize(xyzSize, 3);
+    for(int i=0; i<xyzSize; i++) {
+        xyzMatrix.row(i) = Vector3d(xyzArray[i][0], xyzArray[i][1], xyzArray[i][2]);
+    }
+
+    xyzMatrix = xyzMatrix * rotationXMatrix;
+    xyzMatrix = xyzMatrix * rotationYMatrix;
+
+    cout << xyzMatrix << endl;
+
+    xyzArray.clear();
+    for(int i=0; i<xyzSize; i++) {
+        xyzArray.push_back({xyzMatrix(i,0), xyzMatrix(i,1), xyzMatrix(i,2)});
+    }
+/*
+    for (int i = 0; i < xyzMatrix.n_rows; i++) {
+        xyzArray.push_back({*(xyzMatrix.colptr(0) + 0), *(xyzMatrix.colptr(0) + 0), *(xyzMatrix.colptr(0) + 0)});
+
+    }*/
+
+
+
 	// === MODIFYING OF LINES FOR NEW FILE
 	int sizeI = lineNumbersArray.size();
 	for (int i = 0; i < sizeI; i++) {
@@ -168,19 +213,34 @@ int main() {
 		for (int j = 0; j < parametersArray[i].size(); j++) {
 			extraParams += " " + parametersArray[i][j];
 		}
-		 lineToWrite << commandsArray[i] << " X" << xyzArray[i][0] << " Y" << xyzArray[i][1] << " Z" << xyzArray[i][2] << extraParams;
-		 fileLinesArray[lineNumbersArray[i]] = lineToWrite.str();
+
+		// apply all the offsets, round to 6th decimal place
+		// rounding from: http://www.cplusplus.com/forum/beginner/3600/
+		long double finalX = xyzArray[i][0] - nozzleCompensation.x + bedOffset.x + partOffset.x;
+		long double finalY = xyzArray[i][1] - nozzleCompensation.y + bedOffset.y + partOffset.y;
+		long double finalZ = xyzArray[i][2] - nozzleCompensation.z + partOffset.z;
+
+		finalX = ceil((finalX*pow(10,10)) - 0.49) / pow(10,10);
+		finalY = ceil((finalY*pow(10,10)) - 0.49) / pow(10,10);
+		finalZ = ceil((finalZ*pow(10,10)) - 0.49) / pow(10,10);
+
+        lineToWrite << commandsArray[i] << " X" << finalX << " Y" << finalY << " Z" << finalZ << extraParams;
+		fileLinesArray[lineNumbersArray[i]] = lineToWrite.str();
 	}
 
 	// === WRITE NEW FILE
 	// currently just outputting to cli
-	cout << "M280 P0 S" << S0 << endl;
-	cout << "G4 S100" << endl;
-	cout << "M280 P1 S" << S1 << endl;
-	cout << "G4 S100" << endl;
+	ofstream newFile;
+	newFile.open(outputFilename);
+	newFile << "M280 P0 S" << S0 << endl;
+	newFile << "G4 S100" << endl;
+	newFile << "M280 P1 S" << S1 << endl;
+	newFile << "G4 S100" << endl;
 	for (int i = 0; i < fileLinesArray.size(); i++) {
-		cout << fileLinesArray[i] << endl;
+		newFile << fileLinesArray[i] << endl;
 	}
+
+	newFile.close();
 
 	return 0;
 }

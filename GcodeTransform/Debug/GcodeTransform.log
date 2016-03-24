@@ -1,9 +1,11 @@
-﻿Build started 3/22/2016 5:36:37 PM.
+﻿Build started 3/24/2016 3:07:56 PM.
      1>Project "D:\Thesis\GcodeTransform\GcodeTransform\GcodeTransform.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          D:\Applications\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
          Main.cpp
-     1>d:\thesis\gcodetransform\gcodetransform\main.cpp(131): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\thesis\gcodetransform\gcodetransform\main.cpp(191): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\thesis\gcodetransform\gcodetransform\main.cpp(203): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\thesis\gcodetransform\gcodetransform\main.cpp(229): warning C4018: '<' : signed/unsigned mismatch
        Link:
          D:\Applications\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Thesis\GcodeTransform\Debug\GcodeTransform.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Thesis\GcodeTransform\Debug\GcodeTransform.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Thesis\GcodeTransform\Debug\GcodeTransform.lib" /MACHINE:X86 Debug\Main.obj
          GcodeTransform.vcxproj -> D:\Thesis\GcodeTransform\Debug\GcodeTransform.exe
@@ -11,4 +13,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.17
+Time Elapsed 00:00:02.10

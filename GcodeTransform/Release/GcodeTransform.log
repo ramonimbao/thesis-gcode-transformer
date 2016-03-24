@@ -1,17 +1,32 @@
-﻿Build started 3/22/2016 7:32:54 PM.
+﻿Build started 3/24/2016 1:47:57 PM.
      1>Project "D:\Thesis\GcodeTransform\GcodeTransform\GcodeTransform.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          D:\Applications\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
          Main.cpp
-     1>Main.cpp(148): warning C4018: '<' : signed/unsigned mismatch
-     1>Main.cpp(161): warning C4018: '<' : signed/unsigned mismatch
+     1>Main.cpp(182): warning C4018: '<' : signed/unsigned mismatch
+     1>Main.cpp(191): warning C4018: '<' : signed/unsigned mismatch
+     1>Main.cpp(206): warning C4018: '<' : signed/unsigned mismatch
        Link:
          D:\Applications\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Thesis\GcodeTransform\Release\GcodeTransform.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Thesis\GcodeTransform\Release\GcodeTransform.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Thesis\GcodeTransform\Release\GcodeTransform.lib" /MACHINE:X86 /SAFESEH Release\Main.obj
-         Generating code
-         Finished generating code
-         GcodeTransform.vcxproj -> D:\Thesis\GcodeTransform\Release\GcodeTransform.exe
-     1>Done Building Project "D:\Thesis\GcodeTransform\GcodeTransform\GcodeTransform.vcxproj" (Build target(s)).
+     1>Main.obj : error LNK2001: unresolved external symbol _zgemm_
+     1>Main.obj : error LNK2001: unresolved external symbol _sgemm_
+     1>Main.obj : error LNK2001: unresolved external symbol _zgesv_
+     1>Main.obj : error LNK2001: unresolved external symbol _dgemv_
+     1>Main.obj : error LNK2001: unresolved external symbol _ddot_
+     1>Main.obj : error LNK2001: unresolved external symbol _sdot_
+     1>Main.obj : error LNK2001: unresolved external symbol _cgesv_
+     1>Main.obj : error LNK2001: unresolved external symbol _sgemv_
+     1>Main.obj : error LNK2001: unresolved external symbol _dgesv_
+     1>Main.obj : error LNK2001: unresolved external symbol _sgesv_
+     1>Main.obj : error LNK2001: unresolved external symbol _dsyrk_
+     1>Main.obj : error LNK2001: unresolved external symbol _zgemv_
+     1>Main.obj : error LNK2001: unresolved external symbol _cgemv_
+     1>Main.obj : error LNK2001: unresolved external symbol _ssyrk_
+     1>Main.obj : error LNK2001: unresolved external symbol _dgemm_
+     1>Main.obj : error LNK2001: unresolved external symbol _cgemm_
+     1>D:\Thesis\GcodeTransform\Release\GcodeTransform.exe : fatal error LNK1120: 16 unresolved externals
+     1>Done Building Project "D:\Thesis\GcodeTransform\GcodeTransform\GcodeTransform.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:03.16
+Time Elapsed 00:00:03.21
