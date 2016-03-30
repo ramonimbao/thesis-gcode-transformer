@@ -80,7 +80,7 @@ int main() {
 	// === MATH TIME
 	// the values below represent where the nozzle is versus where it should be. subtracting the values above to the current position should compensate for where the nozzle is when rotating
 	nozzleCompensation.x = nozzleOffset.x / 2 + cos((S0 - atan(nozzleOffset.x / nozzleOffset.y)*180.0f/M_PI)*M_PI/180.0f)*sqrt(pow(nozzleOffset.x / 2, 2) + pow(nozzleOffset.y / 2, 2)) + (sin((S0 + 90)*M_PI/180.0f)*dist*sin(S1*M_PI/180.0f));
-	nozzleCompensation.y = nozzleOffset.y / 2 + sin((S0 - atan(nozzleOffset.x / nozzleOffset.y)*180.0f/M_PI)*M_PI/180.0f)*sqrt(pow(nozzleOffset00.x - nozzleOffset.x / 2.0f, 2) + pow(nozzleOffset00.y - nozzleOffset.y / 2.0f, 2)) + (sin((S0 + 90)*M_PI/180.0f)*dist*sin(S1*M_PI/180.0f));
+	nozzleCompensation.y = nozzleOffset.y / 2 + sin((S0 - atan(nozzleOffset.x / nozzleOffset.y)*180.0f/M_PI)*M_PI/180.0f)*sqrt(pow(nozzleOffset00.x - nozzleOffset.x / 2.0f, 2) + pow(nozzleOffset00.y - nozzleOffset.y / 2.0f, 2)) + (cos((S0 + 90)*M_PI/180.0f)*dist*sin(S1*M_PI/180.0f));
 	nozzleCompensation.z = cos((90 - abs(S1))*M_PI/180.0f) * nozzleOffset.z;
 	//cout << "; Nozzle Compensation: (" << nozzleCompensation.x << "," << nozzleCompensation.y << "," << nozzleCompensation.z << ")\n";
 
@@ -169,9 +169,10 @@ int main() {
 
 	// === MATRIX MATH TIME
 
-	double rotX = S1 * sin((S0 + 90)*M_PI/180);
-	double rotY = S1 * cos((S0 + 90)*M_PI/180);
-	cout << "Rot X, Y: " << rotX << "," << rotY << endl;
+	double rotX = S1 * cos((S0 + 90)*M_PI/180);
+	double rotY = S1 * sin((S0 + 90)*M_PI/180);
+	cout << "Rot X, Y: " << rotX << ", " << rotY << endl;
+	cout << "Nozzle Compensation X, Y: " << nozzleCompensation.x << ", " << nozzleCompensation.y << endl;
 
 	rotationXMatrix << 1, 0, 0,
                        0, cos(rotX*M_PI/180), sin(rotX*M_PI/180),
@@ -191,7 +192,7 @@ int main() {
     xyzMatrix = xyzMatrix * rotationXMatrix;
     xyzMatrix = xyzMatrix * rotationYMatrix;
 
-    cout << xyzMatrix << endl;
+    //cout << xyzMatrix << endl;
 
     xyzArray.clear();
     for(int i=0; i<xyzSize; i++) {
@@ -217,7 +218,7 @@ int main() {
 		// apply all the offsets, round to 6th decimal place
 		// rounding from: http://www.cplusplus.com/forum/beginner/3600/
 		long double finalX = xyzArray[i][0] - nozzleCompensation.x + bedOffset.x + partOffset.x;
-		long double finalY = xyzArray[i][1] - nozzleCompensation.y + bedOffset.y + partOffset.y;
+		long double finalY = xyzArray[i][1] + nozzleCompensation.y + bedOffset.y + partOffset.y;
 		long double finalZ = xyzArray[i][2] - nozzleCompensation.z + partOffset.z;
 
 		finalX = ceil((finalX*pow(10,10)) - 0.49) / pow(10,10);
