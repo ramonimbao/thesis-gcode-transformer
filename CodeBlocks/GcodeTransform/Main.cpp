@@ -162,7 +162,6 @@ int main() {
 			lineNumbersArray.push_back(currentLineNumber);
 			//cout << "Current position: (" << currentPosition.x << "," << currentPosition.y << "," << currentPosition.z << ")\n";
 			//fileLines.push_back(g01.str());
-			//
 		}
 
 		currentLineNumber++;
