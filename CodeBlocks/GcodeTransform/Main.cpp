@@ -218,7 +218,7 @@ int main() {
 		// apply all the offsets, round to 6th decimal place
 		// rounding from: http://www.cplusplus.com/forum/beginner/3600/
 		long double finalX = xyzArray[i][0] - nozzleCompensation.x + bedOffset.x + partOffset.x;
-		long double finalY = xyzArray[i][1] + nozzleCompensation.y + bedOffset.y + partOffset.y;
+		long double finalY = xyzArray[i][1] - nozzleCompensation.y + bedOffset.y + partOffset.y;
 		long double finalZ = xyzArray[i][2] - nozzleCompensation.z + partOffset.z;
 
 		finalX = ceil((finalX*pow(10,10)) - 0.49) / pow(10,10);
